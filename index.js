@@ -12,11 +12,27 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const LOGSEQ_PATH = process.env.LOGSEQ_PATH || './';
 const ASSETS_PATH = path.join(LOGSEQ_PATH, 'assets');
+const AUTHORIZED_USERS = process.env.AUTHORIZED_USERS
+    ? process.env.AUTHORIZED_USERS.split(',').map(id => Number(id.trim()))
+    : [];
+
 
 if (!fs.existsSync(ASSETS_PATH)) {
     fs.mkdirSync(ASSETS_PATH, { recursive: true });
     console.log(`Created assets directory at ${ASSETS_PATH}`);
 }
+
+bot.use(async (ctx, next) => {
+    const userId = ctx.from?.id;
+
+    if (!userId || !AUTHORIZED_USERS.includes(userId)) {
+        console.log(`Unauthorized access attempt from user ID: ${userId}`);
+        return ctx.reply('Sorry, you are not authorized to use this bot.');
+    }
+
+    return next();
+});
+
 
 bot.use(async (ctx, next) => {
     console.time(`Processing update ${ctx.update.update_id}`);
