@@ -45,14 +45,7 @@ bot.on(message('text'), async (ctx) => {
         return;
     }
 
-    const now = new Date();
-    const timestamp = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    });
-
-    const text = `[${timestamp}] ${ctx.message.text}`;
+    const text = `${ctx.message.text}`;
 
 
     let command = `lsq -a "${text}"`;
@@ -68,7 +61,6 @@ bot.on(message('text'), async (ctx) => {
             if (stderr) {
                 return ctx.reply(`Note saved with warnings:\n${stderr}`);
             }
-
         });
     } catch (e) {
         return ctx.reply(`Failed to save note: ${e.message}`);
@@ -117,15 +109,7 @@ bot.on(message('photo'), async (ctx) => {
             writer.on('error', reject);
         });
 
-        const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-
-        const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
-        const mediaNote = `[${timestamp}] 📷 Image${caption}\n![${fileName}](../assets/${fileName})`;
+        const mediaNote = `![${fileName}](../assets/${fileName})`;
 
         exec(`lsq -a "${mediaNote}"`, (error, stdout, stderr) => {
             if (error) {
@@ -176,15 +160,7 @@ bot.on(message('video'), async (ctx) => {
             writer.on('error', reject);
         });
 
-        const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-
-        const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
-        const mediaNote = `[${timestamp}] 🎬 Video${caption}\n![${fileName}](../assets/${fileName})`;
+        const mediaNote = `![${fileName}](../assets/${fileName})`;
 
         exec(`lsq -a "${mediaNote}"`, (error, stdout, stderr) => {
             if (error) {
@@ -240,15 +216,9 @@ bot.on(message('document'), async (ctx) => {
             writer.on('error', reject);
         });
 
-        const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
 
-        const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
-        const mediaNote = `[${timestamp}] 📄 File: ${fileName}${caption}\n[${fileName}](../assets/${fileName})`;
+
+        const mediaNote = `[${fileName}](../assets/${fileName})`;
 
         exec(`lsq -a "${mediaNote}"`, (error, stdout, stderr) => {
             if (error) {
@@ -307,15 +277,7 @@ bot.on(message('audio'), async (ctx) => {
             writer.on('error', reject);
         });
 
-        const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-
-        const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
-        const mediaNote = `[${timestamp}] 🎵 Audio: ${fileName}${caption}\n![${fileName}](../assets/${fileName})`;
+        const mediaNote = `![${fileName}](../assets/${fileName})`;
 
         exec(`lsq -a "${mediaNote}"`, (error, stdout, stderr) => {
             if (error) {
@@ -394,16 +356,7 @@ bot.on(message('voice'), async (ctx) => {
             });
         });
 
-        const now = new Date();
-        const timestamp = now.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-
-        const duration = ctx.message.voice.duration ? ` (${ctx.message.voice.duration}s)` : '';
-        const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
-        const mediaNote = `[${timestamp}] 🎤 Voice message${duration}${caption}\n![${mp3FileName}](../assets/${mp3FileName})`;
+        const mediaNote = `![${mp3FileName}](../assets/${mp3FileName})`;
 
         exec(`lsq -a "${mediaNote}"`, (error, stdout, stderr) => {
             if (error) {
